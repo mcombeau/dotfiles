@@ -1,0 +1,65 @@
+---
+- name: Find Neovim install path
+  ansible.builtin.command: "{{ item }} --version"
+  with_items:
+    - /opt/nvim-linux64/bin/nvim
+    - /usr/local/bin/nvim
+    - /usr/bin/nvim
+    - /bin/nvim
+  register: nvim_install_candidates
+  ignore_errors: true
+  changed_when: false
+
+- name: Filter successful Neovim path check
+  ansible.builtin.set_fact:
+    nvim_install_info: "{{ nvim_install_candidates.results | selectattr('rc', 'equalto', 0) | list | first }}"
+
+- name: Extract the installed Neovim path and version
+  ansible.builtin.set_fact:
+    nvim_installed_version: "{{ nvim_install_info.stdout.split(' ')[1].split('\n')[0] }}"
+    nvim_installed_path: "{{ nvim_install_info.item }}"
+  when: nvim_install_info is defined
+
+- name: Get the latest Neovim release version from GitHub
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/neovim/neovim/releases/latest
+    return_content: true
+  register: neovim_latest_release
+
+- name: Set the latest Neovim version and download URL
+  ansible.builtin.set_fact:
+    latest_nvim_version: "{{ neovim_latest_release.json.tag_name }}"
+    nvim_download_url: "{{ (neovim_latest_release.json.assets | selectattr('name', 'search', 'nvim-linux64.tar.gz') | list)[0].browser_download_url }}"
+
+- name: Debug installed and latest Neovim versions
+  ansible.builtin.debug:
+    msg:
+      - "Installed Neovim version: {{ nvim_installed_version | default('Not installed') }}"
+      - "Latest Neovim version: {{ latest_nvim_version }}"
+
+- name: Remove old Neovim if outdated or installing fresh
+  when: nvim_installed_version is defined and nvim_installed_version != latest_nvim_version
+  ansible.builtin.file:
+    path: "{{ nvim_installed_path }}"
+    state: absent
+
+- name: Install or update Neovim if not installed or outdated
+  when: nvim_installed_version is not defined or nvim_installed_version != latest_nvim_version
+  block:
+    - name: Download the latest Neovim tar.gz
+      ansible.builtin.get_url:
+        url: "{{ nvim_download_url }}"
+        dest: /tmp/nvim-linux64.tar.gz
+        mode: '0644'
+
+    - name: Extract Neovim tar.gz
+      ansible.builtin.unarchive:
+        src: /tmp/nvim-linux64.tar.gz
+        dest: /usr/local
+        remote_src: true
+
+    - name: Create symlink for Neovim binary
+      ansible.builtin.file:
+        src: /usr/local/nvim-linux64/bin/nvim
+        dest: /usr/local/bin/nvim
+        state: link

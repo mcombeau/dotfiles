@@ -1,0 +1,30 @@
+---
+- name: Ensure Homebrew is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/brew
+  register: brew_check
+
+- name: Install Homebrew if not installed
+  ansible.builtin.shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: not brew_check.stat.exists
+  args:
+    creates: /usr/local/bin/brew
+  become: true  # We still need privilege to install in /usr/local
+  become_user: "{{ regular_user }}"  # Use the non-root user for Homebrew installation
+
+- name: Add Homebrew to PATH for this session
+  ansible.builtin.shell: |
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/{{ regular_user }}/.bashrc
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  become: true
+  become_user: "{{ regular_user }}"
+  args:
+    executable: /bin/bash  # Ensure that the command is executed within a bash shell
+  changed_when: false
+
+- name: Install Taskfile using Homebrew
+  ansible.builtin.command: /home/linuxbrew/.linuxbrew/bin/brew install go-task/tap/go-task
+  args:
+    creates: /usr/local/bin/task
+  become: true
+  become_user: "{{ regular_user }}"

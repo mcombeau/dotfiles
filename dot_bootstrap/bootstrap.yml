@@ -1,0 +1,53 @@
+# Bootstrap install basic packages on localhost.
+# Supports for Debian-based distros like Ubuntu and Mint.
+---
+- name: Bootstrap localhost
+  hosts: localhost
+  become: true
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: set regular user
+      ansible.builtin.set_fact:
+        regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+
+    - name: Override distribution for Linux Mint
+      ansible.builtin.set_fact:
+        custom_distribution: "{{ 'ubuntu' if ansible_distribution == 'Linux Mint' else ansible_distribution | lower }}"
+        custom_distribution_release: "{{ 'noble' if ansible_distribution_release == 'wilma' else ansible_distribution_release }}"
+
+    - name: "Debug: print distribution and release"
+      ansible.builtin.debug:
+        msg:
+          - "True distribution: {{ ansible_distribution }}"
+          - "True distribution release: {{ ansible_distribution_release }}"
+          - "Custom distribution: {{ custom_distribution }}"
+          - "Custom distribution release: {{ custom_distribution_release }}"
+
+    - name: Install system packages
+      include_tasks: tasks/system_packages.yml
+
+    - name: Install Neovim
+      include_tasks: tasks/nvim.yml
+
+    - name: Install and configure Docker
+      include_tasks: tasks/docker.yml
+
+    - name: Install HashiCorp tools (Terraform)
+      include_tasks: tasks/hashicorp.yml
+
+    - name: Install Brave browser
+      include_tasks: tasks/brave_browser.yml
+
+    - name: Install Insomnia
+      include_tasks: tasks/insomnia.yml
+
+    - name: Install DBeaver
+      include_tasks: tasks/dbeaver.yml
+
+    - name: Install Golang
+      include_tasks: tasks/golang.yml
+
+    - name: Install Homebrew and Brew packages
+      include_tasks: tasks/homebrew.yml

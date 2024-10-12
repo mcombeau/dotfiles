@@ -1,0 +1,50 @@
+---
+- name: Check if Golang is installed and check the version
+  ansible.builtin.command: go version
+  register: go_version_output
+  ignore_errors: true
+  changed_when: false
+
+- name: Set a fact if Golang is installed and correct version
+  ansible.builtin.set_fact:
+    go_installed: "{{ go_version_output.rc == 0 }}"
+    go_correct_version: "{{ 'go1.23.2' in go_version_output.stdout }}"
+  when: go_version_output.rc == 0
+
+- name: Debug Golang installation status
+  ansible.builtin.debug:
+    msg:
+      - "Golang is installed: {{ go_installed }}"
+      - "Golang is correct version: {{ go_correct_version }}"
+
+- name: Download Golang binary
+  ansible.builtin.get_url:
+    url: https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
+    dest: /tmp/go1.23.2.linux-amd64.tar.gz
+    mode: "0644"
+  when: not go_correct_version
+
+- name: Remove any previous Go installation
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/local/go
+    - /usr/bin/go
+  when: not go_correct_version
+
+- name: Extract Go binary
+  ansible.builtin.unarchive:
+    src: /tmp/go1.23.2.linux-amd64.tar.gz
+    dest: /usr/local
+    remote_src: true
+    mode: "0755"
+  when: not go_correct_version
+
+- name: Add Go to the system path
+  ansible.builtin.copy:
+    dest: /etc/profile.d/go.sh
+    content: |
+      export PATH=$PATH:/usr/local/go/bin
+    mode: "0755"
+  when: not go_correct_version

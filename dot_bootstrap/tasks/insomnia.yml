@@ -1,0 +1,20 @@
+---
+- name: Download Insomnia setup script
+  ansible.builtin.get_url:
+    url: https://packages.konghq.com/public/insomnia/setup.deb.sh
+    dest: /tmp/insomnia_setup.deb.sh
+    mode: '0755'
+
+- name: Run the Insomnia setup script
+  ansible.builtin.command: bash /tmp/insomnia_setup.deb.sh
+  args:
+    creates: /etc/apt/sources.list.d/kong-insomnia.list
+  environment:
+    distro: ubuntu
+    codename: "{{ custom_distribution_release }}"
+
+- name: Install Insomnia
+  ansible.builtin.apt:
+    name: insomnia
+    state: present
+    update_cache: true
