@@ -2,6 +2,7 @@
 - name: Install packages
   ansible.builtin.apt:
     name:
+      - alacritty
       - ca-certificates # dependency for docker
       - curl
       - fzf
