@@ -1,2 +1,4 @@
 README.md
 .shell/secrets.shell
+.config/nvim/.gitignore
+.config/nvim/.git
