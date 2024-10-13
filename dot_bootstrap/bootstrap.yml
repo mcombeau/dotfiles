@@ -28,6 +28,9 @@
     - name: Install system packages
       include_tasks: tasks/system_packages.yml
 
+    - name: Install Zoxide
+      include_tasks: tasks/zoxide.yml
+
     - name: Install Neovim
       include_tasks: tasks/nvim.yml
 

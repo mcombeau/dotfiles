@@ -1,0 +1,11 @@
+---
+- name: Download zoxide installation script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh
+    dest: /tmp/zoxide_install.sh
+    mode: '0755'
+
+- name: Run zoxide installation script
+  ansible.builtin.command: sh /tmp/zoxide_install.sh
+  args:
+    creates: /home/{{ regular_user }}/.local/bin/zoxide
