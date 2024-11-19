@@ -13,6 +13,7 @@ return {
 
 		telescope.setup({
 			defaults = {
+				file_ignore_patterns = { "!/.github" },
 				path_display = { "smart" },
 				mappings = {
 					i = {
@@ -28,9 +29,9 @@ return {
 
 		local keymap = vim.keymap
 		keymap.set("n", "<leader><leader>", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
-		keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
-		keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Grep in cwd" })
-		keymap.set("n", "<leader>fw", "<cmd>Telescope grep_string<cr>", { desc = "Grep word under cursor in cwd" })
-		keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
+		keymap.set("n", "<leader>/r", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
+		keymap.set("n", "<leader>/a", "<cmd>Telescope live_grep<cr>", { desc = "Grep in cwd" })
+		keymap.set("n", "<leader>/w", "<cmd>Telescope grep_string<cr>", { desc = "Grep word under cursor in cwd" })
+		keymap.set("n", "<leader>/t", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
 	end,
 }

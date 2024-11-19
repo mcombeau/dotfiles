@@ -1,50 +1,43 @@
 return {
-	"slugbyte/lackluster.nvim",
+	"catppuccin/nvim",
 	lazy = false,
 	priority = 1000,
 	init = function()
-		local lackluster = require("lackluster")
-
-		-- !must called setup() before setting the colorscheme!
-		lackluster.setup({
-			-- tweak_color allows you to overwrite the default colors in the lackluster theme
-			tweak_color = {
-				-- you can set a value to a custom hexcode like' #aaaa77' (hashtag required)
-				-- or if the value is 'default' or nil it will use lackluster's default color
-				-- lack = "#aaaa77",
-				lack = "#93c47d",
-				-- lack = "default",
-				luster = "default",
-				orange = "default",
-				yellow = "default",
-				green = "default",
-				blue = "default",
-				red = "default",
-				-- WARN: Watchout! messing with grays is probs a bad idea, its very easy to shoot yourself in the foot!
-				-- black = "default",
-				-- gray1 = "default",
-				-- gray2 = "default",
-				-- gray3 = "default",
-				-- gray4 = "default",
-				-- gray5 = "default",
-				-- gray6 = "default",
-				-- gray7 = "default",
-				-- gray8 = "default",
-				-- gray9 = "default",
-			},
-		})
-		require("nvim-web-devicons").setup({
-			color_icons = false,
-			override = {
-				["default_icon"] = {
-					color = lackluster.color.gray4,
-					name = "Default",
+		local catppuccin = require("catppuccin")
+		catppuccin.setup({
+			flavour = "mocha", -- latte, frappe, macchiato, mocha
+			color_overrides = {
+				all = {
+					rosewater = "#cdd6f4",
+					flamingo = "#bac2de",
+					pink = "#e2da4e",
+					mauve = "#585b70",
+					red = "#36dfc6",
+					maroon = "#bac2de",
+					peach = "#36dfc6",
+					yellow = "#585b70",
+					green = "#42edd3",
+					teal = "#f6e283",
+					sky = "#f6e283",
+					sapphire = "#585b70",
+					blue = "#36dfc6",
+					lavender = "#cdd6f4",
+					text = "#cdd6f4",
+					subtext1 = "#bac2de",
+					subtext0 = "#a6adc8",
+					overlay2 = "#9399b2",
+					overlay1 = "#7f849c",
+					overlay0 = "#585b70",
+					surface2 = "#585b70",
+					surface1 = "#45475a",
+					surface0 = "#313244",
+					base = "#181825",
+					mantle = "#181825",
+					crust = "#11111b",
 				},
 			},
 		})
-		-- vim.cmd.colorscheme("lackluster")
-		-- vim.cmd.colorscheme("lackluster-hack") -- my favorite
-		vim.cmd.colorscheme("lackluster-mint")
+		vim.cmd.colorscheme("catppuccin")
 	end,
 }
 
@@ -54,19 +47,47 @@ return {
 -- 	priority = 1000,
 -- 	init = function()
 -- 		local lackluster = require("lackluster")
+
 -- 		-- !must called setup() before setting the colorscheme!
--- 		-- require("nvim-web-devicons").setup({
--- 		-- 	color_icons = false,
--- 		-- 	override = {
--- 		-- 		["default_icon"] = {
--- 		-- 			color = lackluster.color.gray4,
--- 		-- 			name = "Default",
--- 		-- 		},
--- 		-- 	},
--- 		-- })
--- 		vim.colorscheme("lackluster")
+-- 		lackluster.setup({
+-- 			-- tweak_color allows you to overwrite the default colors in the lackluster theme
+-- 			tweak_color = {
+-- 				-- you can set a value to a custom hexcode like' #aaaa77' (hashtag required)
+-- 				-- or if the value is 'default' or nil it will use lackluster's default color
+-- 				-- lack = "#aaaa77",
+-- 				lack = "#93c47d",
+-- 				-- lack = "default",
+-- 				luster = "default",
+-- 				orange = "default",
+-- 				yellow = "default",
+-- 				green = "default",
+-- 				blue = "default",
+-- 				red = "default",
+-- 				-- WARN: Watchout! messing with grays is probs a bad idea, its very easy to shoot yourself in the foot!
+-- 				-- black = "default",
+-- 				-- gray1 = "default",
+-- 				-- gray2 = "default",
+-- 				-- gray3 = "default",
+-- 				-- gray4 = "default",
+-- 				-- gray5 = "default",
+-- 				-- gray6 = "default",
+-- 				-- gray7 = "default",
+-- 				-- gray8 = "default",
+-- 				-- gray9 = "default",
+-- 			},
+-- 		})
+-- 		require("nvim-web-devicons").setup({
+-- 			color_icons = false,
+-- 			override = {
+-- 				["default_icon"] = {
+-- 					color = lackluster.color.gray4,
+-- 					name = "Default",
+-- 				},
+-- 			},
+-- 		})
+-- 		-- vim.cmd.colorscheme("lackluster")
 -- 		-- vim.cmd.colorscheme("lackluster-hack") -- my favorite
--- 		-- vim.cmd.colorscheme("lackluster-mint")
+-- 		vim.cmd.colorscheme("lackluster-mint")
 -- 	end,
 -- }
 

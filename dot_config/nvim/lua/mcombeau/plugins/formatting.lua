@@ -31,7 +31,7 @@ return {
 				python = { "ruff" },
 				typescript = { "prettier" },
 				typescriptreact = { "prettier" },
-				yaml = { "prettier" },
+				-- yaml = { "prettier" },
 			},
 			format_on_save = format_on_save_enabled and {
 				lsp_fallback = true,

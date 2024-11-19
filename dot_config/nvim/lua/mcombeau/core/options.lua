@@ -37,5 +37,10 @@ opt.splitbelow = true -- split horizontal window to the bottom
 opt.swapfile = false -- disable swapfiles
 opt.backup = false -- disable file backups
 
+-- Setup persistence for undotree
+local undodir = vim.fn.stdpath("data") .. "/undodir"
+vim.opt.undodir = undodir
+opt.undofile = true
+
 -- Scrolloff
-vim.opt.scrolloff = 8 -- try to stay 8 lines away from top/bottom of screen
+opt.scrolloff = 8 -- try to stay 8 lines away from top/bottom of screen
