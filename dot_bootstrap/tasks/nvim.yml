@@ -13,6 +13,7 @@
 - name: Filter successful Neovim path check
   ansible.builtin.set_fact:
     nvim_install_info: "{{ nvim_install_candidates.results | selectattr('rc', 'equalto', 0) | list | first }}"
+  when: nvim_install_candidates is defined
 
 - name: Extract the installed Neovim path and version
   ansible.builtin.set_fact:
